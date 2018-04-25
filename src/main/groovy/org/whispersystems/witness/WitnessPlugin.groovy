@@ -31,7 +31,7 @@ class WitnessPlugin implements Plugin<Project> {
                     String name  = parts.get(1)
                     String hash  = parts.get(2)
 
-                    ResolvedArtifact dependency = project.configurations.compile.resolvedConfiguration.resolvedArtifacts.find {
+                    ResolvedArtifact dependency = project.configurations.testRuntime.resolvedConfiguration.resolvedArtifacts.find {
                         return it.name.equals(name) && it.moduleVersion.id.group.equals(group)
                     }
 
@@ -47,11 +47,12 @@ class WitnessPlugin implements Plugin<Project> {
             }
         }
 
+
         project.task('calculateChecksums') << {
             println "dependencyVerification {"
             println "    verify = ["
 
-            project.configurations.compile.resolvedConfiguration.resolvedArtifacts.each {
+            project.configurations.testRuntime.resolvedConfiguration.resolvedArtifacts.each {
                 dep ->
                     println "        '" + dep.moduleVersion.id.group+ ":" + dep.name + ":" + calculateSha256(dep.file) + "',"
             }
